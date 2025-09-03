@@ -108,6 +108,10 @@
     <input type="button" value="元の速度" onClick="setSpeed(1)">
     <br>
 
+    <input type="button" value="開始を設定" id="startTime">
+    <input type="button" value="終了を設定" id="finTime">
+    <br>
+
     <label>
       開始 (秒):
       <input type="number" id="start" value="0" min="0" step="0.1" />
@@ -123,7 +127,6 @@
     現在（秒）：<span id="position">0</span><br>
     全体（秒）：<span id="length"></span><br>
     再生速度  ：<span id="speed">1.0</span><br>
-    音量      ：<span id="volume">1.0</span><br>
     <span id="message"></span>
   </div>
 
@@ -194,6 +197,19 @@
             pause()
         }
     });
+
+    document.getElementById('startTime').addEventListener('click', function() {
+        const st = document.getElementById('start');
+        st.value = v.currentTime.toFixed(2);
+        st.dispatchEvent(new Event('input', { bubbles: true }));
+    })
+                               
+    document.getElementById('finTime').addEventListener('click', function() {
+        const ft = document.getElementById('end');
+        ft.value = v.currentTime.toFixed(2);
+        ft.dispatchEvent(new Event('input', { bubbles: true }));
+    })
+    
 
     function play() {
         v.play();
