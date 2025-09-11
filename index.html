@@ -96,20 +96,21 @@
   </video><br/>
 
   <div>
-    <input type="button" value="再生" onClick="play()">
-    <input type="button" value="一時停止" onClick="pause()">
+    <input type="button" value="再生(P)" onClick="play()">
+    <input type="button" value="一時停止(P)" onClick="pause()">
 
-    <input type="button" value="5秒前" onClick="seekDown()">
-    <input type="button" value="5秒後" onClick="seekUp()">
+    <input type="button" value="5秒前(←)" onClick="seekDown()">
+    <input type="button" value="5秒後(→)" onClick="seekUp()">
     <br>
 
-    <input type="button" value="-0.2倍" onClick="changeSpeed(-0.2)">
-    <input type="button" value="+0.2倍" onClick="changeSpeed(0.2)">
-    <input type="button" value="元の速度" onClick="setSpeed(1)">
+    <input type="button" value="-0.2倍(A)" onClick="changeSpeed(-0.2)">
+    <input type="button" value="+0.2倍(Q)" onClick="changeSpeed(0.2)">
+    <input type="button" value="元の速度(U)" onClick="setSpeed(1)">
     <br>
 
-    <input type="button" value="開始を設定" id="startTime">
-    <input type="button" value="終了を設定" id="finTime">
+    <input type="button" value="開始を設定(S)" id="startTime">
+    <input type="button" value="終了を設定(E)" id="finTime">
+    <input type="button" value="最初から(R)" id="GoStart">
     <br>
 
     <label>
@@ -120,8 +121,7 @@
       終了 (秒):
       <input type="number" id="end" value="172.919002" min="0" step="0.1" />
     </label>
-    <button id="apply">適用</button>
-    <button id="loop">ループ再生</button>
+    <button id="loop">ループ再生(L)</button>
     <br>
 
     現在（秒）：<span id="position">0</span><br>
@@ -136,6 +136,7 @@
     const applyBtn = document.getElementById('apply');
     const loopBtn = document.getElementById('loop');
     const video = document.getElementById("video");
+    const StartIn = document.getElementById("GoStart")
     let v;
 
     function init(){
@@ -176,7 +177,6 @@
     }
 
     applyRange();
-    applyBtn.addEventListener('click', applyRange);
 
     video.addEventListener('timeupdate', function() {
         if (looping && video.currentTime > range.end) {
@@ -189,15 +189,21 @@
     loopBtn.addEventListener('click', function() {
         looping = !looping;
         if (looping) {
+            applyRange();
             video.currentTime = range.start;
             video.play();
-            loopBtn.textContent = 'ループ停止';
+            loopBtn.textContent = 'ループ停止(L)';
         } else {
-            loopBtn.textContent = 'ループ再生';
+            loopBtn.textContent = 'ループ再生(L)';
             pause()
         }
     });
 
+
+    StartIn.addEventListener('click', function() {
+        video.currentTime = 0;
+    })
+      
     document.getElementById('startTime').addEventListener('click', function() {
         const st = document.getElementById('start');
         st.value = v.currentTime.toFixed(2);
@@ -244,6 +250,44 @@
         v.currentTime -= 5;
     }
 
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'S' || event.key === 's') {
+        document.getElementById('startTime').click();
+      }
+    　if (event.key === 'E' || event.key === 'e') {
+        document.getElementById('finTime').click();
+      }
+    　if (event.key === 'L' || event.key === 'l') {
+        document.getElementById('loop').click();
+      }
+    　if (event.key === 'ArrowLeft') {
+        seekDown();
+      }
+    　if (event.key === 'ArrowRight') {
+        seekUp();
+      }
+    　if (event.key === 'Q' || event.key === 'q') {
+        changeSpeed(0.2);
+      }
+    　if (event.key === 'A' || event.key === 'a') {
+        changeSpeed(-0.2);
+      }
+    　if (event.key === 'U' || event.key === 'u') {
+        setSpeed(1);
+      }
+    　if (event.key === 'R' || event.key === 'r') {
+        StartIn.click();
+      }
+    　if (event.key === 'P' || event.key === 'p') {
+        if (video.paused){
+            play();
+        }else{
+            pause();
+        }
+      }
+    });
+  
     init();
   </script>
 </body>
