@@ -123,6 +123,8 @@
     </label>
     <button id="loop">ループ再生(L)</button>
     <br>
+    <input type="checkbox" name="os" value="skip" id="Skip">隊形をスキップ
+    <br>
 
     現在（秒）：<span id="position">0</span><br>
     全体（秒）：<span id="length"></span><br>
@@ -215,8 +217,25 @@
         ft.value = v.currentTime.toFixed(2);
         ft.dispatchEvent(new Event('input', { bubbles: true }));
     })
-    
 
+    const checkbox = document.getElementById('Skip');
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        SkipB = true
+      } else {
+        SkipB = false
+      }
+    });
+      
+    let SkipB = false;
+    setInterval(() => {
+    if (SkipB) {
+        if (v.currentTime.toFixed(2) > 81 && v.currentTime.toFixed(2) < 110){
+            v.currentTime = 110;
+        }
+    }
+    },10);
+      
     function play() {
         v.play();
     }
